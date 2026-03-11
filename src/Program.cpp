@@ -80,6 +80,7 @@ void Program::Draw() {
                    Vector2{0, 0}, 0, WHITE);
     }
 
+    DrawText(TextFormat("Score: %i", score), 10, 50, 25, WHITE);
 
     for (Projectile p : Projectile::projectiles) p.draw();
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) if (p.second) p.second->draw();
@@ -155,7 +156,9 @@ void Program::KeyInputs() {
     if (!paused && !startup && IsKeyPressed('O')) gameOver = !gameOver;
     if (!gameOver && !paused && IsKeyPressed('I')) startup = !startup;
     if (IsKeyPressed('H')) HitBox::drawHitbox = !HitBox::drawHitbox;
-    
+    if (IsKeyPressed('K')) {
+        score += 500;
+    }
     if (gameOver && IsKeyPressed(KEY_ENTER)) {
         gameOver = false;
         Reset();
@@ -183,7 +186,8 @@ void Program::PlayerReset() {
 
 void Program::Reset() {
     Enemy::enemies.clear();
-
+    score = 0;
+    extraLife = 0;
     Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
             std::pair<float, float>{350, 150}, 
             new SpEnemy(350, 150)
@@ -193,7 +197,7 @@ void Program::Reset() {
             std::pair<float, float>{600, 150}, 
             new SpEnemy(600, 150)
         });
-        
+
     for (int i = 0; i < 30; i++) {
         float x = 250 + 50 * (i % 10);
         float y = 200 + 50 * (i / 10);
