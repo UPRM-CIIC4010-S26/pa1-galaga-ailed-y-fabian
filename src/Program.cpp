@@ -35,21 +35,22 @@ void Program::Update() {
     pauseFrames = std::max(pauseFrames - 1, 0);
 
     if (!startup && !paused && !gameOver && pauseFrames <= 0) {
-        Enemy::ManageEnemies(player->hitBox);
+        Enemy::ManageEnemies(player->hitBox, score, lives, extraLifeGoal);
         StdEnemy::attackReset();
         ManageEnemyRespawns();
         player->update();
+        
 
         for (std::pair<std::pair<float, float>, Enemy*> p : Enemy::enemies) {
             if (p.second && HitBox::Collision(player->hitBox, p.second->hitBox)) {
                 Animation::animations.push_back(
                     Animation(player->position.first, player->position.second, 16, 0, 33, 34, 30 ,30, 3, ImageManager::SpriteSheet)
                 );
-
+            
                 PlaySound(SoundManager::gameOver);
                 Projectile::projectiles.clear();
                 player->position.first = GetScreenWidth() / 2 - 15;
-                p.second->health = 0;
+                p.second->health = -1;
                 pauseFrames = 120;
                 lives--;
             }
@@ -158,6 +159,7 @@ void Program::KeyInputs() {
     if (IsKeyPressed('H')) HitBox::drawHitbox = !HitBox::drawHitbox;
     if (IsKeyPressed('K')) {
         score += 500;
+        addExtraLives();
     }
     if (gameOver && IsKeyPressed(KEY_ENTER)) {
         gameOver = false;
@@ -187,7 +189,7 @@ void Program::PlayerReset() {
 void Program::Reset() {
     Enemy::enemies.clear();
     score = 0;
-    extraLife = 0;
+    extraLifeGoal = 1000;
     Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
             std::pair<float, float>{350, 150}, 
             new SpEnemy(350, 150)
@@ -215,4 +217,10 @@ void Program::Reset() {
     count = 0;
     delay = 0;
     lives = 3;
+}
+void Program::addExtraLives() {
+    if (score >= extraLifeGoal && lives < 5) {
+        lives += 1;
+        extraLifeGoal += 1000;
+    }
 }
