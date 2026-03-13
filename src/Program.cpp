@@ -95,8 +95,16 @@ void Program::ManageEnemyRespawns() {
     delay = std::max(delay - 1, 0);
 
     respawnCooldown -= 1;
+    if (score >= respawnReducerGoal) {
+        respawnCooldownMax -= 50;
+        respawnReducerGoal += 1000;
+    }
+    if (respawnCooldownMax < 300) {
+        respawnCooldownMax = 300;
+    }
     if (respawnCooldown <= 0) {
-        respawnCooldown = 1080;
+        respawnCooldown = respawnCooldownMax;
+        
         for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
             if (!p.second && p.first.second != 150) {
                 int eType = GetRandomValue(1, 3);
@@ -118,7 +126,8 @@ void Program::ManageEnemyRespawns() {
         }
     }
 
-    if(respawns >= 4) {
+
+    if (respawns >= 4) {
         count = 4;
         respawns = 0;
     }

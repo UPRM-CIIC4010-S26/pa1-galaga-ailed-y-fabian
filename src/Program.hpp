@@ -13,7 +13,8 @@ class Program {
     private:
         Background background = Background();
         Player* player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
-        int respawnCooldown = 1080;
+        int respawnCooldownMax = 1080;
+        int respawnCooldown = respawnCooldownMax;
         int respawns = 0;
         int count = 0;
         int delay = 0;
@@ -21,7 +22,7 @@ class Program {
         int pauseFrames = 0;
         int score = 0;
         int extraLifeGoal = 1000;
-        
+        int respawnReducerGoal = 1000;
         
         bool startup = true;
         bool paused = false;
