@@ -99,8 +99,8 @@ void Program::ManageEnemyRespawns() {
         respawnCooldownMax -= 50;
         respawnReducerGoal += 1000;
     }
-    if (respawnCooldownMax < 300) {
-        respawnCooldownMax = 300;
+    if (respawnCooldownMax < 200) {
+        respawnCooldownMax = 200;
     }
     if (respawnCooldown <= 0) {
         respawnCooldown = respawnCooldownMax;

@@ -54,9 +54,14 @@ class Enemy {
                         if (p2.ID != 1 && HitBox::Collision(p.second->hitBox, p2.getHitBox())) {
                             p.second->health--;
                             p2.del = true;
+                        
+                        if (p.second->health > 0) {
+                            PlaySound(SoundManager::hit);
+                        } else {
+                            PlaySound(SoundManager::dead);
                         }
                     }
-
+                }
                     if (p.second->health <= 0) {
                         Animation::animations.push_back(
                             Animation(p.second->position.first, p.second->position.second, 155, 0, 33, 33, 30, 30, 4, ImageManager::SpriteSheet)
@@ -67,7 +72,7 @@ class Enemy {
                             extraLifeGoal += 1000;
                         }
                         p.second = nullptr;
-                    }
+                    }  
                 }
             }
             
@@ -85,4 +90,5 @@ class Enemy {
                 direction *= -1;
             }
         }
+    
 };
